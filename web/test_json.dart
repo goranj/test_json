@@ -5,6 +5,8 @@ import 'dart:json' as json;
 
 part 'student.dart';
 
+HttpRequest request;
+
 void main() {
   loadData();
 //  print(new Student('5507172939', 'Göran Johansson', '', '', ''));
@@ -12,18 +14,33 @@ void main() {
 }
 
 void loadData() {
-//  var url = "http://127.0.0.1:8080/programming-languages";
+  request = new HttpRequest();
+
+  request.onReadyStateChange.listen(onDataLoaded);
+
   var url = "https://script.google.com/a/macros/longbay.se/s/AKfycbzeu-2KwKocJdXvGvPBiR73BcU8J6dbIsGp9CbTf_JaqbnILM0/exec";
+
+  request.open('GET', url);
+  request.send();
 
   // call the web server asynchronously
 //  var request = HttpRequest.getString(url).then(onDataLoaded).catchError(handleError);
-  var request = HttpRequest.request(url).then(onDataLoaded).catchError(handleError);
+//  var request = HttpRequest.request(url).then(onDataLoaded).catchError(handleError);
 }
 
 // print the raw json response text from the server
-void onDataLoaded(HttpRequest responseText) {
-  var jsonString = responseText.responseText;
-  print(jsonString);
+void onDataLoaded(_) {
+  if (request.readyState == HttpRequest.DONE &&
+      request.status == 200) {
+    // Data saved OK.
+    print('Server Sez: ' + request.responseText);
+  } else if (request.readyState == HttpRequest.DONE &&
+      request.status == 0) {
+    // Status is 0...most likely the server isn't running.
+    print('No server');
+  }
+//  var jsonString = responseText.responseText;
+//  print(jsonString);
 }
 
 void handleError(error) {
