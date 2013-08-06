@@ -18,7 +18,8 @@ void loadData() {
 
   request.onReadyStateChange.listen(onDataLoaded);
 
-  var url = "https://script.google.com/a/macros/longbay.se/s/AKfycbzeu-2KwKocJdXvGvPBiR73BcU8J6dbIsGp9CbTf_JaqbnILM0/exec";
+//  var url = "https://script.google.com/a/macros/longbay.se/s/AKfycbzeu-2KwKocJdXvGvPBiR73BcU8J6dbIsGp9CbTf_JaqbnILM0/exec";
+  var url = "https://script.google.com/macros/s/AKfycbzeu-2KwKocJdXvGvPBiR73BcU8J6dbIsGp9CbTf_JaqbnILM0/exec";
 
   request.open('GET', url);
   request.send();
@@ -33,7 +34,13 @@ void onDataLoaded(_) {
   if (request.readyState == HttpRequest.DONE &&
       request.status == 200) {
     // Data saved OK.
-    print('Server Sez: ' + request.responseText);
+    var response = request.responseText;
+    print('Server Sez: ' + response);
+    List<Map> jsonResponse = json.parse(response);
+    print(jsonResponse);
+    print(jsonResponse is List);
+    print(jsonResponse[0] is Map);
+    jsonResponse.forEach((row) => print(row['result']));
   } else if (request.readyState == HttpRequest.DONE &&
       request.status == 0) {
     // Status is 0...most likely the server isn't running.
