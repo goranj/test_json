@@ -2,8 +2,11 @@ library test_json;
 
 import 'dart:html';
 import 'dart:json' as json;
+import 'dart:math';
+import 'package:intl/intl.dart';
 
 part 'student.dart';
+part 'random_student.dart';
 
 HttpRequest request;
 
@@ -35,12 +38,14 @@ void onDataLoaded(_) {
       request.status == 200) {
     // Data saved OK.
     var response = request.responseText;
-    print('Server Sez: ' + response);
     List<Map> jsonResponse = json.parse(response);
-    print(jsonResponse);
-    print(jsonResponse is List);
-    print(jsonResponse[0] is Map);
-    jsonResponse.forEach((row) => print(row['result']));
+
+    List<RandomStudent> rndStudents = [];
+    jsonResponse.forEach((row) {
+      rndStudents.add(new RandomStudent.withRandomId(row['namn']));
+    });
+    rndStudents.forEach((rndStudent) => print(rndStudent));
+
   } else if (request.readyState == HttpRequest.DONE &&
       request.status == 0) {
     // Status is 0...most likely the server isn't running.
