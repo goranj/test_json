@@ -11,7 +11,8 @@ part 'random_student.dart';
 HttpRequest request;
 
 void main() {
-  loadData();
+  print(new RandomStudent('5507172939', 'Göran Johansson', 'event'));
+//  loadData();
 //  print(new Student('5507172939', 'Göran Johansson', '', '', ''));
 //  print('hej hopp!');
 }
